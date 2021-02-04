@@ -36,7 +36,7 @@ process. Let's start with how, starting from a codebase, plugin developers would
 add specialisation by extending the existing classes, with the purpose that
 their specialisations will replace the initial implementation:
 
-![](doc/plugin development.svg)
+![](doc/plugin%20development.svg)
 
 So in the image above, both `Plugin1` and `Plugin2` extend the base code, while
 `Plugin3` is based on `Plugin2`.
@@ -46,7 +46,7 @@ plugins in an app, with only one `A` class and one `B` class?
 
 In comes `chaining-class-resolver`:
 
-![](doc/app development.svg)
+![](doc/app%20development.svg)
 
 With `chaining-class-loader`, code comes in modules, and all base code and 
 plugins are modules that will be linearized. That is done at class load time, by
