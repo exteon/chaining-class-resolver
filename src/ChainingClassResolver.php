@@ -5,6 +5,7 @@
     use Exception;
     use Exteon\Loader\ChainingClassResolver\DataStructure\TargetClassFileSpec;
     use Exteon\Loader\ChainingClassResolver\DataStructure\TargetNSSpec;
+    use Exteon\Loader\ChainingClassResolver\DataStructure\WeavedClass;
     use Exteon\Loader\MappingClassLoader\IClassResolver;
     use Exteon\Loader\MappingClassLoader\IClassScanner;
     use Exteon\Loader\MappingClassLoader\LoadAction;

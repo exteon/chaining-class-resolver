@@ -9,6 +9,7 @@
     use Exteon\Loader\ChainingClassResolver\DataStructure\ProcessedClassSpec;
     use Exteon\Loader\ChainingClassResolver\DataStructure\RegistrationMeta;
     use Exteon\Loader\ChainingClassResolver\DataStructure\TargetNSSpec;
+    use Exteon\Loader\ChainingClassResolver\DataStructure\WeavedClass;
     use PhpParser\Node;
     use PhpParser\Node\Name;
     use PhpParser\Node\Name\FullyQualified;

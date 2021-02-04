@@ -1,6 +1,6 @@
 <?php
 
-    namespace Exteon\Loader\ChainingClassResolver;
+    namespace Exteon\Loader\ChainingClassResolver\DataStructure;
 
     class WeavedClass
     {
