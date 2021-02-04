@@ -1,0 +1,36 @@
+{
+  "name": "exteon/chaining-class-resolver",
+  "version": "1.0.0",
+  "description": "???",
+  "type": "library",
+  "homepage": "https://github.com/exteon/chaining-class-resolver",
+  "authors": [
+    {
+      "name": "Dinu Marina"
+    }
+  ],
+  "license": "https://www.apache.org/licenses/LICENSE-2.0",
+  "autoload": {
+    "psr-4": {
+      "Exteon\\Loader\\ChainingClassResolver\\": [
+        "src",
+        "interfaces"
+      ]
+    }
+  },
+  "require": {
+    "exteon/class-helper": "^1.1.0",
+    "exteon/mapping-class-loader": "^2.1.0",
+    "nikic/php-parser": "^4.2.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5"
+  },
+  "repositories":{
+    "class-helper": {
+      "type": "path",
+      "url": "/mnt/libraries/class-helper"
+    }
+  }
+
+}
