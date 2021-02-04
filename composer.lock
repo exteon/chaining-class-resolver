@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7552c6b233cfd5272a483f187447483e",
+    "content-hash": "abbfefb9188df5f3685f2536f434dffa",
     "packages": [
         {
             "name": "exteon/class-helper",
             "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/exteon/class-helper.git",
+                "reference": "a6391680c74565c4bd57872dbb83a604ca9d467a"
+            },
             "dist": {
-                "type": "path",
-                "url": "/mnt/libraries/class-helper",
-                "reference": "fd9ac4d71f3299894b67c1fa0d2ccd8941fc147b"
+                "type": "zip",
+                "url": "https://api.github.com/repos/exteon/class-helper/zipball/a6391680c74565c4bd57872dbb83a604ca9d467a",
+                "reference": "a6391680c74565c4bd57872dbb83a604ca9d467a",
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -22,6 +28,7 @@
                     ]
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -32,9 +39,11 @@
             ],
             "description": "Helper for common class and class namespace functions",
             "homepage": "https://github.com/exteon/class-name-helper",
-            "transport-options": {
-                "relative": false
-            }
+            "support": {
+                "issues": "https://github.com/exteon/class-helper/issues",
+                "source": "https://github.com/exteon/class-helper/tree/1.1.0"
+            },
+            "time": "2021-01-26T19:01:32+00:00"
         },
         {
             "name": "exteon/file-helper",
