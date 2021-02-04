@@ -46,7 +46,7 @@ plugins in an app, with only one `A` class and one `B` class?
 
 In comes `chaining-class-resolver`:
 
-![](doc/app%20development.svg)
+![](doc/app development.svg)
 
 With `chaining-class-loader`, code comes in modules, and all base code and 
 plugins are modules that will be linearized. That is done at class load time, by
