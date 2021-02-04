@@ -1,7 +1,7 @@
 {
   "name": "exteon/chaining-class-resolver",
   "version": "1.0.0",
-  "description": "???",
+  "description": "Weaving class loader framework for PHP modular plugins providing class chaining",
   "type": "library",
   "homepage": "https://github.com/exteon/chaining-class-resolver",
   "authors": [
@@ -9,7 +9,7 @@
       "name": "Dinu Marina"
     }
   ],
-  "license": "https://www.apache.org/licenses/LICENSE-2.0",
+  "license": "Apache-2.0",
   "autoload": {
     "psr-4": {
       "Exteon\\Loader\\ChainingClassResolver\\": [
