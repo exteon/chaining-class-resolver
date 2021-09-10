@@ -6,16 +6,16 @@
     use Exteon\Loader\ChainingClassResolver\DataStructure\TargetClassFileSpec;
     use Exteon\Loader\ChainingClassResolver\DataStructure\TargetNSSpec;
     use Exteon\Loader\ChainingClassResolver\DataStructure\WeavedClass;
-    use Exteon\Loader\MappingClassLoader\IClassResolver;
-    use Exteon\Loader\MappingClassLoader\IClassScanner;
-    use Exteon\Loader\MappingClassLoader\LoadAction;
+    use Exteon\Loader\MappingClassLoader\ClassResolver;
+    use Exteon\Loader\MappingClassLoader\ClassScanner;
+    use Exteon\Loader\MappingClassLoader\Data\LoadAction;
     use PhpParser\Lexer;
     use PhpParser\NodeTraverser;
     use PhpParser\NodeVisitor\NameResolver;
     use PhpParser\ParserFactory;
     use Exteon\ClassNameHelper;
 
-    class ChainingClassResolver implements IClassResolver, IClassScanner
+    class ChainingClassResolver implements ClassResolver, ClassScanner
     {
         /** @var string */
         protected $targetNs;
@@ -173,7 +173,7 @@
         {
             $classes = [];
             foreach ($this->moduleRegistry::getModuleChain() as $module) {
-                if ($module instanceof IClassScanner) {
+                if ($module instanceof ClassScanner) {
                     $moduleClasses = $module->scanClasses();
                     foreach ($moduleClasses as $class) {
                         $classFileSpec = $module->resolveClass($class);

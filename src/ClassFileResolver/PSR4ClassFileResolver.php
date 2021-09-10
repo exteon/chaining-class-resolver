@@ -8,11 +8,11 @@
     use Exteon\Loader\ChainingClassResolver\DataStructure\ClassFileSpec;
     use Exteon\Loader\ChainingClassResolver\DataStructure\NSSpec;
     use Exteon\Loader\ChainingClassResolver\IClassFileResolver;
-    use Exteon\Loader\MappingClassLoader\IClassScanner;
+    use Exteon\Loader\MappingClassLoader\ClassScanner;
     use RecursiveDirectoryIterator;
     use RecursiveIteratorIterator;
 
-    class PSR4ClassFileResolver implements IClassFileResolver, IClassScanner
+    class PSR4ClassFileResolver implements IClassFileResolver, ClassScanner
     {
         const PHP_FILE_SUFFIX = '.php';
 

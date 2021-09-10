@@ -62,7 +62,7 @@
             $loader = new MappingClassLoader(
                 [],
                 [$resolver],
-                [],
+                null,
                 new StreamWrapLoader([])
             );
             $loader->register();

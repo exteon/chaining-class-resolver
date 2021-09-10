@@ -4,9 +4,9 @@
 
     use Exception;
     use Exteon\Loader\ChainingClassResolver\DataStructure\ClassFileSpec;
-    use Exteon\Loader\MappingClassLoader\IClassScanner;
+    use Exteon\Loader\MappingClassLoader\ClassScanner;
 
-    class Module implements IModule, IClassScanner
+    class Module implements IModule, ClassScanner
     {
         /**
          * @var string
@@ -83,7 +83,7 @@
         {
             $classes = [];
             foreach ($this->classFileResolvers as $fileResolver) {
-                if ($fileResolver instanceof IClassScanner) {
+                if ($fileResolver instanceof ClassScanner) {
                     $classes = array_merge(
                         $classes,
                         array_flip($fileResolver->scanClasses())
