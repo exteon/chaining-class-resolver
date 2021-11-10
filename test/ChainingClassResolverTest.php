@@ -3,6 +3,7 @@
     namespace Test\Exteon\Loader\ChainingClassResolver;
 
     use Exception;
+    use Exteon\ClassMeta;
     use Exteon\Loader\ChainingClassResolver\ChainedClassMeta;
     use Exteon\Loader\ChainingClassResolver\ChainingClassResolver;
     use Exteon\Loader\ChainingClassResolver\ClassFileResolver\PSR4ClassFileResolver;
@@ -125,5 +126,76 @@
                     \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Bar2::class
                 )->getChainParent()->getClassName()
             );
+
+            /*
+             * Test that chain traits contain traits included upwards in the
+             * hierarchy
+             */
+            {
+                $chainTraits = ChainedClassMeta::get(
+                    \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Trait2::class
+                )->getChainTraits();
+                $has = false;
+                foreach ($chainTraits as $chainTrait) {
+                    if (
+                        $chainTrait->getClassName() ===
+                        \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Trait3::class
+                    ) {
+                        $has = true;
+                        break;
+                    }
+                }
+                self::assertTrue($has);
+                self::assertTrue(
+                    ChainedClassMeta::get(
+                        \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Trait2::class
+                    )->hasChainTrait(
+                        \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Trait3::class
+                    )
+                );
+            }
+
+            /*
+             * Test that chained traits are hidden
+             * hierarchy
+             */
+            {
+                $chainTraits = ChainedClassMeta::get(
+                    \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Trait2::class
+                )->getChainTraits();
+                $has = false;
+                foreach ($chainTraits as $chainTrait) {
+                    if (
+                        $chainTrait->getClassName() ===
+                        Test\Exteon\Loader\ChainingClassResolver\Props\Module3\Trait2::class ||
+                        $chainTrait->getClassName() ===
+                        Test\Exteon\Loader\ChainingClassResolver\Props\Module2\Trait2::class ||
+                        $chainTrait->getClassName() ===
+                        Test\Exteon\Loader\ChainingClassResolver\Props\Module2\Trait3::class
+                    ) {
+                        $has = true;
+                        break;
+                    }
+                }
+                self::assertFalse($has);
+                $chainedClassMeta = ChainedClassMeta::get(
+                    \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Trait2::class
+                );
+                self::assertFalse(
+                    $chainedClassMeta->hasChainTrait(
+                        Test\Exteon\Loader\ChainingClassResolver\Props\Module3\Trait2::class
+                    )
+                );
+                self::assertFalse(
+                    $chainedClassMeta->hasChainTrait(
+                        Test\Exteon\Loader\ChainingClassResolver\Props\Module2\Trait2::class
+                    )
+                );
+                self::assertFalse(
+                    $chainedClassMeta->hasChainTrait(
+                        Test\Exteon\Loader\ChainingClassResolver\Props\Module2\Trait3::class
+                    )
+                );
+            }
         }
     }

@@ -4,6 +4,7 @@
 
     use Exteon\ClassMeta;
     use Exteon\Loader\ChainingClassResolver\DataStructure\RegistrationMeta;
+    use InvalidArgumentException;
     use ReflectionException;
     use SplObjectStorage;
 
@@ -36,6 +37,9 @@
 
         /** @var static[]|null */
         protected $chainInterfaces;
+
+        /** @var array<class-string,bool> */
+        protected $hasChainTrait;
 
         protected function __construct(string $className)
         {
@@ -117,6 +121,7 @@
             }
             if ($this->getClassMeta()->isInterface()) {
                 $chainTraits = null;
+                $hasChainTrait = null;
             } else {
                 $current = $this;
                 $traitsFlipped = new SplObjectStorage();
@@ -134,6 +139,9 @@
                         if ($trait->getChainedClass() !== $chain) {
                             $traitsFlipped[$trait] = null;
                         }
+                        foreach($trait->getChainTraits() as $chainTrait){
+                            $traitsFlipped[$chainTrait] = null;
+                        }
                     }
                     $current = $current->getClassMeta()->getParent() ?
                         static::get(
@@ -146,12 +154,15 @@
                     $current->getChainedClass() === $chain
                 );
                 $chainTraits = [];
+                $hasChainTrait = [];
                 /** @var static $trait */
                 foreach ($traitsFlipped as $trait) {
                     $chainTraits[] = $trait;
+                    $hasChainTrait[$trait->getClassName()] = null;
                 }
             }
             $this->chainTraits = $chainTraits;
+            $this->hasChainTrait = $hasChainTrait;
             $this->isChainTraitsInit = true;
         }
 
@@ -161,9 +172,44 @@
          */
         public function getChainTraits(): ?array
         {
-            $head = $this->getChainedClass() ?? $this;
-            $head->initChainTraits();
-            return $head->chainTraits;
+            $this->initChainTraits();
+            return $this->chainTraits;
+        }
+
+        /**
+         * @param $trait
+         * @return bool
+         * @throws ReflectionException
+         */
+        public function hasChainTrait($trait): bool
+        {
+            $invalidArgument = false;
+            $traitName = null;
+            if ($trait instanceof self) {
+                if (!$trait->getClassMeta()->isTrait()) {
+                    $invalidArgument = true;
+                } else {
+                    $traitName = $trait->getClassName();
+                }
+            } elseif($trait instanceof ClassMeta){
+                if (!$trait->isTrait()) {
+                    $invalidArgument = true;
+                } else {
+                    $traitName = $trait->getClassName();
+                }
+            } elseif (is_string($trait)) {
+                $traitName = $trait;
+            } else {
+                $invalidArgument = true;
+            }
+            if ($invalidArgument) {
+                throw new InvalidArgumentException(
+                    'Trait-type ClassMeta object or string expected'
+                );
+            }
+            $this->initChainTraits();
+            return array_key_exists($traitName, $this->hasChainTrait);
+
         }
 
         /**
