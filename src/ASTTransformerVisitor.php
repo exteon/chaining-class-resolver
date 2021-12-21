@@ -314,7 +314,7 @@
                     $name = ClassNameHelper::addNsLeading(
                         $replacement->getThis()
                     );
-                    $this->canonicalExtends[] = $name;
+                    $this->canonicalInterfaces[] = $name;
                 }
             }
             if ($node instanceof Trait_) {
