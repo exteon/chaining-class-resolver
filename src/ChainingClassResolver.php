@@ -218,7 +218,7 @@
                 ) {
                     $classDef .= "        /**\n";
                     foreach ($extends as $extend) {
-                        $classDef .= "         * @extends {$extend}\n";
+                        $classDef .= "         * @mixin {$extend}\n";
                     }
                     foreach ($implements as $implement) {
                         $classDef .= "         * @implements {$implement}\n";
