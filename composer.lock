@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a536e654650284db7f8f3d0516d01abf",
+    "content-hash": "f9b8b55be0ecbdd285e95f9955e1e573",
     "packages": [
         {
             "name": "exteon/class-helper",
@@ -68,11 +68,11 @@
         },
         {
             "name": "exteon/mapping-class-loader",
-            "version": "3.0.2",
+            "version": "4.0.0",
             "dist": {
                 "type": "path",
                 "url": "/mnt/libraries/mapping-class-loader",
-                "reference": "a77f39fea6ef5066802f28a12b2d1f32cd05031d"
+                "reference": "dcfe63e1f62e36a389f95958affd7d664cb3957d"
             },
             "require": {
                 "exteon/file-helper": "^1.1.1"

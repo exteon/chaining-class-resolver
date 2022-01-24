@@ -1,3 +1,9 @@
+### 2.0.1
+
+#### Improvements
+
+* Upgrade `exteon/mapping-class-loader`
+
 # 2.0.0
 
 #### Changes
