@@ -4,8 +4,8 @@
 
     class ProcessedClassSpec
     {
-        protected string $_this;
-        protected ?string $parent;
+        private string $_this;
+        private ?string $parent;
 
         /**
          * ClassReplacementSpec constructor.

@@ -3,9 +3,9 @@
     namespace Exteon\Loader\ChainingClassResolver\DataStructure;
 
     class TargetClassFileSpec {
-        protected TargetNSSpec $classSpec;
-        protected string $path;
-        protected string $moduleName;
+        private TargetNSSpec $classSpec;
+        private string $path;
+        private string $moduleName;
 
         public function __construct(
             TargetNSSpec $classSpec,

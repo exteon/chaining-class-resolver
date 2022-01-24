@@ -16,7 +16,7 @@
     {
         const PHP_FILE_SUFFIX = '.php';
 
-        protected string $baseNs;
+        private string $baseNs;
         private string $basePath;
 
         public function __construct(string $basePath, string $baseNs)
@@ -96,7 +96,7 @@
          * @param NSSpec $nsSpec
          * @return ClassFileSpec|null
          */
-        protected function resolveFromNsSpec(
+        private function resolveFromNsSpec(
             NSSpec $nsSpec
         ): ?ClassFileSpec {
             $fileName = $nsSpec->getClass() . self::PHP_FILE_SUFFIX;
@@ -122,7 +122,7 @@
          * @param string $classRelativeNsName
          * @return NSSpec
          */
-        protected function getNSSpecFromRelativeClass(
+        private function getNSSpecFromRelativeClass(
             string $classRelativeNsName
         ): NSSpec {
             [

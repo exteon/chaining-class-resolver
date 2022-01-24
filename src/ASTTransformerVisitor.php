@@ -23,39 +23,39 @@
 
     class ASTTransformerVisitor extends NodeVisitorAbstract
     {
-        protected const INTERMEDIATE_CLASS_SUFFIX = 'ccr_inter';
+        private const INTERMEDIATE_CLASS_SUFFIX = 'ccr_inter';
 
-        protected TargetNSSpec $classSpec;
-        protected ?TargetNSSpec $previousClassSpec;
-        protected ?string $filePath;
-        protected ChainingClassResolver $resolver;
-        protected Class_|Interface_|Trait_|null $classNode;
+        private TargetNSSpec $classSpec;
+        private ?TargetNSSpec $previousClassSpec;
+        private ?string $filePath;
+        private ChainingClassResolver $resolver;
+        private Class_|Interface_|Trait_|null $classNode;
 
         /** @var TraitUse[] */
-        protected array $traits = [];
+        private array $traits = [];
 
-        protected string $source;
-        protected string $initialSource;
+        private string $source;
+        private string $initialSource;
 
         /** @var array<int,int> */
-        protected array $positionCoresp = [];
+        private array $positionCoresp = [];
 
-        protected bool $isAbstract = false;
-        protected bool $isFinal = false;
-        protected bool $isTrait = false;
-        protected bool $isClass = false;
-        protected bool $isInterface = false;
-        protected string $moduleName;
-        protected bool $doTraitExtend = false;
-
-        /** @var string[] */
-        protected array $canonicalTraits = [];
+        private bool $isAbstract = false;
+        private bool $isFinal = false;
+        private bool $isTrait = false;
+        private bool $isClass = false;
+        private bool $isInterface = false;
+        private string $moduleName;
+        private bool $doTraitExtend = false;
 
         /** @var string[] */
-        protected array $canonicalInterfaces = [];
+        private array $canonicalTraits = [];
+
+        /** @var string[] */
+        private array $canonicalInterfaces = [];
 
         /**  @var string[] */
-        protected array $canonicalExtends = [];
+        private array $canonicalExtends = [];
 
         public function __construct(
             $source,
@@ -187,7 +187,7 @@
                                 $seq,
                                 $node
                             );
-                            $fragment = "abstract class {$intermediate}";
+                            $fragment = "abstract class $intermediate";
                             if ($extend) {
                                 $fragment .= " extends " . $extend;
                             }
@@ -207,8 +207,7 @@
                                 );
                         }
                     }
-                    $block = "";
-                    $block .= implode('', $fragments);
+                    $block = implode('', $fragments);
                     $this->addBefore($node, $block);
                     if ($node->extends) {
                         $this->replace($node->extends, $extend . ' ');
@@ -356,7 +355,7 @@
         }
 
 
-        protected function translatePos(int $pos, bool $append = false): ?int
+        private function translatePos(int $pos, bool $append = false): ?int
         {
             $delta = 0;
             $nextDelta = 0;
@@ -392,7 +391,7 @@
          * @throws ErrorException
          * @throws Exception
          */
-        protected function processClassName(
+        private function processClassName(
             Name $name,
             bool $doReplace = true,
             bool $extendMode = false
@@ -454,7 +453,7 @@
          * @throws ErrorException
          * @throws Exception
          */
-        protected function spliceSource(
+        private function spliceSource(
             int $start,
             int $end,
             string $with,
@@ -511,7 +510,7 @@
          * @param string $with
          * @throws ErrorException
          */
-        protected function replace(NodeAbstract $node, string $with): void
+        private function replace(NodeAbstract $node, string $with): void
         {
             $this->spliceSource(
                 $node->getStartFilePos(),
@@ -525,7 +524,7 @@
          * @param string $with
          * @throws ErrorException
          */
-        protected function addBefore(NodeAbstract $node, string $with): void
+        private function addBefore(NodeAbstract $node, string $with): void
         {
             $this->spliceSource(
                 $node->getStartFilePos(),
@@ -540,7 +539,7 @@
          * @param string $with
          * @throws ErrorException
          */
-        protected function addAfter(NodeAbstract $node, string $with): void
+        private function addAfter(NodeAbstract $node, string $with): void
         {
             $this->spliceSource(
                 $node->getEndFilePos() + 1,
@@ -554,7 +553,7 @@
          * @param Node $node
          * @return int|null
          */
-        protected function findBlockStartPos(Node $node): ?int
+        private function findBlockStartPos(Node $node): ?int
         {
             $pos = $node->getStartFilePos();
             if (
@@ -581,7 +580,7 @@
          * @param $with
          * @throws ErrorException
          */
-        protected function addInBlock(Node $node, $with): void
+        private function addInBlock(Node $node, $with): void
         {
             $pos = $this->findBlockStartPos($node);
             if ($pos === null) {
@@ -591,11 +590,9 @@
         }
 
         /**
-         * @param Class_ $node
-         * @param $qualifier
          * @throws ErrorException
          */
-        protected function removeClassQualifier(Class_ $node, $qualifier): void
+        private function removeClassQualifier(Class_ $node, string $qualifier): void
         {
             $pos = $node->getStartFilePos();
             $matches = [];
@@ -624,11 +621,11 @@
          * @param Node|null $node
          * @return string
          */
-        protected function fileErr(Node $node = null): string
+        private function fileErr(Node $node = null): string
         {
             $result = '';
             if ($this->filePath) {
-                $result .= " in {$this->filePath}";
+                $result .= " in $this->filePath";
             }
             if ($node) {
                 $result .= " on line {$node->getLine()}";
@@ -666,7 +663,7 @@
          * @throws ErrorException
          */
         #[ArrayShape(['traitNs' => "string", 'intermediate' => "string"])]
-        protected function addTrait(
+        private function addTrait(
             Name $traitName,
             string $className,
             int $seq,
@@ -679,7 +676,7 @@
             $traitNs = $replacement->getThis();
             $intermediate = "{$className}_" .
                 self::INTERMEDIATE_CLASS_SUFFIX .
-                "_trait_{$seq}";
+                "_trait_$seq";
             $intermediateFullClass = ClassNameHelper::joinNs(
                 $this->classSpec->getFullNs(),
                 $intermediate

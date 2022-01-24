@@ -4,9 +4,9 @@
 
     class RegistrationMeta
     {
-        protected string $chainedClass;
-        protected bool $isIntermediate;
-        protected string $moduleName;
+        private string $chainedClass;
+        private bool $isIntermediate;
+        private string $moduleName;
 
         /**
          * RegistrationMeta constructor.

@@ -8,10 +8,10 @@
 
     class Module implements IModule, ClassScanner
     {
-        protected string $name;
+        private string $name;
 
         /** @var IClassFileResolver[] */
-        protected array $classFileResolvers;
+        private array $classFileResolvers;
 
         /**
          * Module constructor.

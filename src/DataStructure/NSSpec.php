@@ -6,9 +6,9 @@
 
     class NSSpec
     {
-        protected ?string $baseNs;
-        protected string $ns;
-        protected ?string $class;
+        private ?string $baseNs;
+        private string $ns;
+        private ?string $class;
 
         /**
          * NsSpec constructor.

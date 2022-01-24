@@ -16,29 +16,29 @@
         public const CLASS_CONST_PARENT = 'CCR_PARENT_CLASS';
 
         /** @var array<string,static> */
-        protected static array $instances;
+        private static array $instances;
 
         /**  @var string */
-        protected string $className;
+        private string $className;
 
         /**  @var ClassMeta */
-        protected ClassMeta $classMeta;
+        private ClassMeta $classMeta;
 
-        protected RegistrationMeta $registrationMeta;
-        protected bool $isChainTraitsInit = false;
-
-        /** @var static[]|null */
-        protected ?array $chainTraits;
-
-        protected bool $isChainInterfacesInit;
+        private RegistrationMeta $registrationMeta;
+        private bool $isChainTraitsInit = false;
 
         /** @var static[]|null */
-        protected ?array $chainInterfaces;
+        private ?array $chainTraits;
+
+        private bool $isChainInterfacesInit;
+
+        /** @var static[]|null */
+        private ?array $chainInterfaces;
 
         /** @var array<class-string,bool> */
-        protected array $hasChainTrait;
+        private array $hasChainTrait;
 
-        protected function __construct(string $className)
+        private function __construct(string $className)
         {
             $this->className = $className;
             $this->classMeta = ClassMeta::get($className);
@@ -112,7 +112,7 @@
         /**
          * @throws ReflectionException
          */
-        protected function initChainTraits(): void
+        private function initChainTraits(): void
         {
             if ($this->isChainTraitsInit) {
                 return;
@@ -213,7 +213,7 @@
         /**
          * @throws ReflectionException
          */
-        protected function initChainInterfaces(): void
+        private function initChainInterfaces(): void
         {
             if ($this->isChainInterfacesInit) {
                 return;

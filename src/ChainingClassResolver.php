@@ -115,7 +115,7 @@
          * @param string $moduleName
          * @return WeavedClass
          */
-        protected function getWeavedClass(
+        private function getWeavedClass(
             $source,
             TargetNSSpec $classSpec,
             ?TargetNSSpec $previousClassSpec,
@@ -196,16 +196,14 @@
          * @param string[] $implements
          * @return string
          */
-        protected function getAggregateCode(
+        private function getAggregateCode(
             TargetNSSpec $previousClassSpec,
             WeavedClass $weavedClass,
             array $extends,
             array $traits,
             array $implements
         ): string {
-            $classDef = '';
-            $classDef .=
-                "    namespace " . $previousClassSpec->getFullTargetNs() .
+            $classDef = "    namespace " . $previousClassSpec->getFullTargetNs() .
                 " {\n";
             if (
                 $weavedClass->isClass() ||
@@ -217,10 +215,10 @@
                 ) {
                     $classDef .= "        /**\n";
                     foreach ($extends as $extend) {
-                        $classDef .= "         * @mixin {$extend}\n";
+                        $classDef .= "         * @mixin $extend\n";
                     }
                     foreach ($implements as $implement) {
-                        $classDef .= "         * @implements {$implement}\n";
+                        $classDef .= "         * @implements $implement\n";
                     }
                     $classDef .= "         */\n";
                 }
@@ -246,7 +244,7 @@
                     $classDef .= "        {\n";
                     $classDef .= "            /**\n";
                     foreach ($traits as $trait) {
-                        $classDef .= "             * @use {$trait}\n";
+                        $classDef .= "             * @use $trait\n";
                     }
                     $classDef .= "             */\n";
                     $classDef .= "        }\n";
@@ -261,7 +259,7 @@
                 if ($traits) {
                     $classDef .= "            /**\n";
                     foreach ($traits as $trait) {
-                        $classDef .= "             * @use {$trait}\n";
+                        $classDef .= "             * @use $trait\n";
                     }
                     $classDef .= "             */\n";
                 }
@@ -284,7 +282,7 @@
          * @param string[] $implements
          * @return string
          */
-        protected function getHintCode(
+        private function getHintCode(
             TargetNSSpec $previousClassSpec,
             WeavedClass $weavedClass,
             array $extends,
@@ -308,7 +306,7 @@
          * @return TargetClassFileSpec[]
          * @throws Exception
          */
-        protected function getChain(string $class): array
+        private function getChain(string $class): array
         {
             $targetClassSpec = $this->resolveToTargetClassNsSpec($class);
             if (!$targetClassSpec) {
@@ -365,7 +363,7 @@
          * @return TargetNSSpec|null
          * @throws Exception
          */
-        protected function resolveToTargetClassNsSpec(string $class
+        private function resolveToTargetClassNsSpec(string $class
         ): ?TargetNSSpec {
             foreach ($this->modules as $module) {
                 $classFileSpec = $module->resolveClass($class);

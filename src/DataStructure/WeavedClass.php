@@ -4,25 +4,22 @@
 
     class WeavedClass
     {
-        protected string $class;
-        protected ?string $source;
-        protected bool $isAbstract;
-        protected bool $isFinal;
-        protected bool $isTrait;
-        protected bool $isInterface;
-        protected bool $isClass;
+        private string $class;
+        private ?string $source;
+        private bool $isAbstract;
+        private bool $isFinal;
+        private bool $isTrait;
+        private bool $isInterface;
+        private bool $isClass;
 
         /** @var string[] */
-        protected array $extends;
+        private array $canonicalTraits;
 
         /** @var string[] */
-        protected array $canonicalTraits;
+        private array $canonicalInterfaces;
 
         /** @var string[] */
-        protected array $canonicalInterfaces;
-
-        /** @var string[] */
-        protected array $canonicalExtends;
+        private array $canonicalExtends;
 
         /**
          * WeavedClass constructor.
@@ -115,14 +112,6 @@
         public function isClass(): bool
         {
             return $this->isClass;
-        }
-
-        /**
-         * @return string[]
-         */
-        public function getExtends(): array
-        {
-            return $this->extends;
         }
 
         /**
