@@ -16,11 +16,8 @@
     {
         const PHP_FILE_SUFFIX = '.php';
 
-        /** @var string */
-        protected $baseNs;
-
-        /** @var string */
-        private $basePath;
+        protected string $baseNs;
+        private string $basePath;
 
         public function __construct(string $basePath, string $baseNs)
         {
@@ -50,7 +47,7 @@
                         $match
                     );
                     $className = $match[1];
-                    array_push($pathFrags, $className);
+                    $pathFrags[] = $className;
                     $classes[ClassNameHelper::joinNs(...$pathFrags)] = null;
                 }
             }

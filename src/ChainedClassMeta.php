@@ -5,6 +5,7 @@
     use Exteon\ClassMeta;
     use Exteon\Loader\ChainingClassResolver\DataStructure\RegistrationMeta;
     use InvalidArgumentException;
+    use JetBrains\PhpStorm\Pure;
     use ReflectionException;
     use SplObjectStorage;
 
@@ -15,31 +16,27 @@
         public const CLASS_CONST_PARENT = 'CCR_PARENT_CLASS';
 
         /** @var array<string,static> */
-        protected static $instances;
+        protected static array $instances;
 
         /**  @var string */
-        protected $className;
+        protected string $className;
 
         /**  @var ClassMeta */
-        protected $classMeta;
+        protected ClassMeta $classMeta;
 
-        /** @var RegistrationMeta|null */
-        protected $registrationMeta;
-
-        /** @var bool */
-        protected $isChainTraitsInit = false;
+        protected RegistrationMeta $registrationMeta;
+        protected bool $isChainTraitsInit = false;
 
         /** @var static[]|null */
-        protected $chainTraits;
+        protected ?array $chainTraits;
 
-        /** @var bool */
-        protected $isChainInterfacesInit;
+        protected bool $isChainInterfacesInit;
 
         /** @var static[]|null */
-        protected $chainInterfaces;
+        protected ?array $chainInterfaces;
 
         /** @var array<class-string,bool> */
-        protected $hasChainTrait;
+        protected array $hasChainTrait;
 
         protected function __construct(string $className)
         {
@@ -95,6 +92,7 @@
         /**
          * @return string|null
          */
+        #[Pure]
         public function getModuleName(): ?string
         {
             if (isset($this->registrationMeta)) {
@@ -167,7 +165,7 @@
         }
 
         /**
-         * @return static[]
+         * @return static[]|null
          * @throws ReflectionException
          */
         public function getChainTraits(): ?array
@@ -281,7 +279,7 @@
         }
 
         /**
-         * @return mixed
+         * @return static[]|null
          * @throws ReflectionException
          */
         public function getChainInterfaces(): ?array

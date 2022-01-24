@@ -4,14 +4,9 @@
 
     class RegistrationMeta
     {
-        /** @var string */
-        protected $chainedClass;
-
-        /** @var bool */
-        protected $isIntermediate;
-
-        /** @var string */
-        protected $moduleName;
+        protected string $chainedClass;
+        protected bool $isIntermediate;
+        protected string $moduleName;
 
         /**
          * RegistrationMeta constructor.

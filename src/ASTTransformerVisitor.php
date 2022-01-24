@@ -5,11 +5,11 @@
     use ErrorException;
     use Exception;
     use Exteon\FileHelper;
-    use Exteon\Loader\ChainingClassResolver\DataStructure\NSSpec;
     use Exteon\Loader\ChainingClassResolver\DataStructure\ProcessedClassSpec;
     use Exteon\Loader\ChainingClassResolver\DataStructure\RegistrationMeta;
     use Exteon\Loader\ChainingClassResolver\DataStructure\TargetNSSpec;
     use Exteon\Loader\ChainingClassResolver\DataStructure\WeavedClass;
+    use JetBrains\PhpStorm\ArrayShape;
     use PhpParser\Node;
     use PhpParser\Node\Name;
     use PhpParser\Node\Name\FullyQualified;
@@ -25,72 +25,38 @@
     {
         protected const INTERMEDIATE_CLASS_SUFFIX = 'ccr_inter';
 
-        /** @var NSSpec */
-        protected $classSpec;
-
-        /** @var NSSpec */
-        protected $previousClassSpec;
-
-        /** @var string|null */
-        protected $filePath;
-
-        /**@var ChainingClassResolver */
-        protected $resolver;
-
-        /** @var Class_|Interface_|Trait_ */
-        protected $classNode;
+        protected TargetNSSpec $classSpec;
+        protected ?TargetNSSpec $previousClassSpec;
+        protected ?string $filePath;
+        protected ChainingClassResolver $resolver;
+        protected Class_|Interface_|Trait_|null $classNode;
 
         /** @var TraitUse[] */
-        protected $traits = [];
+        protected array $traits = [];
 
-        /** @var string */
-        protected $source;
+        protected string $source;
+        protected string $initialSource;
 
-        /** @var string */
-        protected $initialSource;
+        /** @var array<int,int> */
+        protected array $positionCoresp = [];
 
-        /** @var array */
-        protected $positionCoresp = [];
-
-        /** @var bool */
-        protected $isAbstract = false;
-
-        /** @var bool */
-        protected $isFinal = false;
-
-        /**@var bool */
-        protected $isTrait = false;
-
-        /**@var bool */
-        protected $isClass = false;
-
-        /** @var bool */
-        protected $isInterface = false;
-
-        /** @var string */
-        protected $moduleName;
-
-        /** @var bool */
-        protected $doTraitExtend;
+        protected bool $isAbstract = false;
+        protected bool $isFinal = false;
+        protected bool $isTrait = false;
+        protected bool $isClass = false;
+        protected bool $isInterface = false;
+        protected string $moduleName;
+        protected bool $doTraitExtend = false;
 
         /** @var string[] */
-        protected $canonicalTraits = [];
+        protected array $canonicalTraits = [];
 
         /** @var string[] */
-        protected $canonicalInterfaces = [];
+        protected array $canonicalInterfaces = [];
 
         /**  @var string[] */
-        protected $canonicalExtends = [];
+        protected array $canonicalExtends = [];
 
-        /**
-         * ChainingVisitor constructor.
-         * @param $source
-         * @param TargetNSSpec $classSpec
-         * @param TargetNSSpec|null $previousClassSpec
-         * @param string|null $filePath
-         * @param ChainingClassResolver $resolver
-         * @param string $moduleName
-         */
         public function __construct(
             $source,
             TargetNSSpec $classSpec,
@@ -140,8 +106,6 @@
         }
 
         /**
-         * @param Node $node
-         * @return void|null
          * @throws ErrorException
          * @throws Exception
          */
@@ -364,10 +328,7 @@
                 }
                 $this->doTraitExtend = false;
             }
-            if (
-                $node instanceof Name ||
-                $node instanceof FullyQualified
-            ) {
+            if ( $node instanceof Name ) {
                 $this->processClassName($node, true, $this->doTraitExtend);
             }
             if (
@@ -395,12 +356,7 @@
         }
 
 
-        /**
-         * @param int $pos
-         * @param false $append
-         * @return int|null
-         */
-        protected function translatePos(int $pos, $append = false): ?int
+        protected function translatePos(int $pos, bool $append = false): ?int
         {
             $delta = 0;
             $nextDelta = 0;
@@ -433,20 +389,13 @@
         }
 
         /**
-         * @param Name $name
-         * @param bool $doReplace
-         * @param false $extendMode
-         * @return ProcessedClassSpec {
-         *      parent: null|string,
-         *      this: null|string
-         * }
          * @throws ErrorException
          * @throws Exception
          */
         protected function processClassName(
             Name $name,
-            $doReplace = true,
-            $extendMode = false
+            bool $doReplace = true,
+            bool $extendMode = false
         ): ?ProcessedClassSpec {
             $n = $name->__toString();
             if (
@@ -457,7 +406,6 @@
                 return null;
             }
             $parent = null;
-            $_this = null;
             if ($name instanceof FullyQualified) {
                 $ns = $n;
             } elseif ($name->getAttribute('resolvedName')) {
@@ -503,11 +451,6 @@
         }
 
         /**
-         * @param int $start
-         * @param int $end
-         * @param string $with
-         * @param false $append
-         * @param bool $preserveNl
          * @throws ErrorException
          * @throws Exception
          */
@@ -515,8 +458,8 @@
             int $start,
             int $end,
             string $with,
-            $append = false,
-            $preserveNl = true
+            bool $append = false,
+            bool $preserveNl = true
         ): void {
             if (
                 $start < 0 ||
@@ -720,16 +663,9 @@
         }
 
         /**
-         * @param Name $traitName
-         * @param string $className
-         * @param int $seq
-         * @param NodeAbstract $node
-         * @return array {
-         *      traitNs: string,
-         *      intermediate: string
-         * }
          * @throws ErrorException
          */
+        #[ArrayShape(['traitNs' => "string", 'intermediate' => "string"])]
         protected function addTrait(
             Name $traitName,
             string $className,

@@ -6,14 +6,9 @@
 
     class NSSpec
     {
-        /** @var string|null */
-        protected $baseNs;
-
-        /** @var string */
-        protected $ns;
-
-        /** @var string|null */
-        protected $class;
+        protected ?string $baseNs;
+        protected string $ns;
+        protected ?string $class;
 
         /**
          * NsSpec constructor.

@@ -6,17 +6,10 @@
 
     class TargetNSSpec
     {
-        /** @var string|null */
-        protected $baseNs;
-
-        /** @var string */
-        protected $ns;
-
-        /** @var string|null */
-        protected $class;
-
-        /** @var string */
-        protected $targetNs;
+        protected ?string $baseNs;
+        protected string $ns;
+        protected ?string $class;
+        protected string $targetNs;
 
         public function __construct(
             ?string $baseNs,

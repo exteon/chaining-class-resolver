@@ -4,46 +4,25 @@
 
     class WeavedClass
     {
-        /** @var string */
-        protected $class;
+        protected string $class;
+        protected ?string $source;
+        protected bool $isAbstract;
+        protected bool $isFinal;
+        protected bool $isTrait;
+        protected bool $isInterface;
+        protected bool $isClass;
 
-        /** @var string|null */
-        protected $source;
+        /** @var string[] */
+        protected array $extends;
 
-        /** @var bool */
-        protected $isAbstract;
+        /** @var string[] */
+        protected array $canonicalTraits;
 
-        /** @var bool */
-        protected $isFinal;
+        /** @var string[] */
+        protected array $canonicalInterfaces;
 
-        /** @var bool */
-        protected $isTrait;
-
-        /** @var bool */
-        protected $isInterface;
-
-        /** @var bool */
-        protected $isClass;
-
-        /**
-         * @var string[]
-         */
-        protected $extends;
-
-        /**
-         * @var string[]
-         */
-        protected $canonicalTraits;
-
-        /**
-         * @var string[]
-         */
-        protected $canonicalInterfaces;
-
-        /**
-         * @var string[]
-         */
-        protected $canonicalExtends;
+        /** @var string[] */
+        protected array $canonicalExtends;
 
         /**
          * WeavedClass constructor.

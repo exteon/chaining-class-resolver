@@ -4,11 +4,8 @@
 
     class ClassFileSpec
     {
-        /** @var NSSpec */
-        protected $classSpec;
-
-        /** @var string */
-        protected $path;
+        protected NSSpec $classSpec;
+        protected string $path;
 
         /**
          * ChainFileSpec constructor.

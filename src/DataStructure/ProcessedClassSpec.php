@@ -4,16 +4,8 @@
 
     class ProcessedClassSpec
     {
-
-        /**
-         * @var string
-         */
-        protected $_this;
-
-        /**
-         * @var string|null
-         */
-        protected $parent;
+        protected string $_this;
+        protected ?string $parent;
 
         /**
          * ClassReplacementSpec constructor.
@@ -34,9 +26,6 @@
             return $this->_this;
         }
 
-        /**
-         * @return string
-         */
         public function getParent(): ?string
         {
             return $this->parent;
