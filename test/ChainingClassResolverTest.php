@@ -3,12 +3,10 @@
     namespace Test\Exteon\Loader\ChainingClassResolver;
 
     use Exception;
-    use Exteon\ClassMeta;
     use Exteon\Loader\ChainingClassResolver\ChainedClassMeta;
     use Exteon\Loader\ChainingClassResolver\ChainingClassResolver;
     use Exteon\Loader\ChainingClassResolver\ClassFileResolver\PSR4ClassFileResolver;
     use Exteon\Loader\ChainingClassResolver\Module;
-    use Exteon\Loader\ChainingClassResolver\ModuleRegistry;
     use Exteon\Loader\MappingClassLoader\MappingClassLoader;
     use Exteon\Loader\MappingClassLoader\StreamWrapLoader;
     use PHPUnit\Framework\TestCase;
@@ -23,42 +21,37 @@
          */
         public function testClassLoading()
         {
-            ModuleRegistry::registerModule(
-                new Module(
-                    'Module1',
-                    [
-                        new PSR4ClassFileResolver(
-                            'test/Props/Module1',
-                            'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Module1'
-                        )
-                    ]
-                )
-            );
-            ModuleRegistry::registerModule(
-                new Module(
-                    'Module2',
-                    [
-                        new PSR4ClassFileResolver(
-                            'test/Props/Module2',
-                            'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Module2'
-                        )
-                    ]
-                )
-            );
-            ModuleRegistry::registerModule(
-                new Module(
-                    'Module3',
-                    [
-                        new PSR4ClassFileResolver(
-                            'test/Props/Module3',
-                            'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Module3'
-                        )
-                    ]
-                )
-            );
             $resolver = new ChainingClassResolver(
-                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Target',
-                ModuleRegistry::class
+                [
+                    new Module(
+                        'Module1',
+                        [
+                            new PSR4ClassFileResolver(
+                                'test/Props/Module1',
+                                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Module1'
+                            )
+                        ]
+                    ),
+                    new Module(
+                        'Module2',
+                        [
+                            new PSR4ClassFileResolver(
+                                'test/Props/Module2',
+                                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Module2'
+                            )
+                        ]
+                    ),
+                    new Module(
+                        'Module3',
+                        [
+                            new PSR4ClassFileResolver(
+                                'test/Props/Module3',
+                                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Module3'
+                            )
+                        ]
+                    )
+                ],
+                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Target'
             );
             $loader = new MappingClassLoader(
                 [],

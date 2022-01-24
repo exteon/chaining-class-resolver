@@ -17,23 +17,22 @@
 
     class ChainingClassResolver implements ClassResolver, ClassScanner
     {
-        /** @var string */
-        protected $targetNs;
+        private string $targetNs;
 
-        /**  @var ModuleRegistry */
-        protected $moduleRegistry;
+        /** @var IModule[] */
+        private array $modules;
 
         /**
          * ChainingClassResolver constructor.
          * @param string $targetNs
-         * @param string $moduleRegistry
+         * @param IModule[] $modules
          */
         public function __construct(
-            string $targetNs = '',
-            string $moduleRegistry = ModuleRegistry::class
+            array $modules,
+            string $targetNs = ''
         ) {
-            $this->moduleRegistry = $moduleRegistry;
             $this->targetNs = $targetNs;
+            $this->modules = $modules;
         }
 
         /**
@@ -172,7 +171,7 @@
         public function scanClasses(): array
         {
             $classes = [];
-            foreach ($this->moduleRegistry::getModuleChain() as $module) {
+            foreach ($this->modules as $module) {
                 if ($module instanceof ClassScanner) {
                     $moduleClasses = $module->scanClasses();
                     foreach ($moduleClasses as $class) {
@@ -320,7 +319,7 @@
                 $targetClassSpec->getClass()
             );
             $chain = [];
-            foreach ($this->moduleRegistry::getModuleChain() as $module) {
+            foreach ($this->modules as $module) {
                 $classFileSpec = $module->resolveRelativeClass($relativeClass);
                 if ($classFileSpec) {
                     $chain[] = new TargetClassFileSpec(
@@ -345,7 +344,7 @@
          */
         public function getTargetClass(string $class): ?string
         {
-            foreach ($this->moduleRegistry::getModuleChain() as $module) {
+            foreach ($this->modules as $module) {
                 $resolved = $module->resolveClass($class);
                 if ($resolved) {
                     return ClassNameHelper::joinNs(
@@ -368,7 +367,7 @@
          */
         protected function resolveToTargetClassNsSpec(string $class
         ): ?TargetNSSpec {
-            foreach ($this->moduleRegistry::getModuleChain() as $module) {
+            foreach ($this->modules as $module) {
                 $classFileSpec = $module->resolveClass($class);
                 if ($classFileSpec) {
                     return new TargetNSSpec(

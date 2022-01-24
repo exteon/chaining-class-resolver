@@ -90,63 +90,35 @@ Each module defines or extends classes `A` and/or `B` like in the
 You are free to use any directory structure, as long as you have a number of 
 module directories each containing a PSR-4 namespace. 
 
-### The module registry
-
-Next, we must register the modules with the `ModuleRegistry`:
-
-```php
-use Exteon\Loader\ChainingClassResolver\ModuleRegistry;
-use Exteon\Loader\ChainingClassResolver\Module;
-use Exteon\Loader\ChainingClassResolver\ClassFileResolver\PSR4ClassFileResolver;
-
-ModuleRegistry::registerModule(
-    new Module(
-        'Code base',
-        [new PSR4ClassFileResolver(__DIR__ . '/base', 'Code\\Base')]
-    )
-);
-ModuleRegistry::registerModule(
-    new Module(
-        'Plugin 1',
-        [new PSR4ClassFileResolver(__DIR__ . '/plugins/plugin1', 'Plugin1')]
-    )
-);
-ModuleRegistry::registerModule(
-    new Module(
-        'Plugin 2',
-        [new PSR4ClassFileResolver(__DIR__ . '/plugins/plugin2', 'Plugin2')]
-    )
-);
-ModuleRegistry::registerModule(
-    new Module(
-        'Plugin 3',
-        [new PSR4ClassFileResolver(__DIR__ . '/plugins/plugin3', 'Plugin3')]
-    )
-);
-```
-
-Modules will be chained in the order they are registered with the 
-`ModuleRegistry`; there is no dynamic dependency resolution implemented; this 
-means, in the above example, `Plugin 1` will extend/override classes in 
-`Code base`, `Plugin 3` will override all, ect.
-
-***Note***
-
-In order to enable the caching functionality for the weaved class 
-files, the `ModuleRegistry` is an abstract singleton and modules are identified 
-globally by their name (the 1st parameter in the `Module` constructor), which 
-must be unique.
-
-Read [here](#caching) for more details about caching.
-
 ### The chaining resolver
 
 We get a resolver instance:
 
 ```php
 use Exteon\Loader\ChainingClassResolver\ChainingClassResolver;
+use Exteon\Loader\ChainingClassResolver\Module;
+use Exteon\Loader\ChainingClassResolver\ClassFileResolver\PSR4ClassFileResolver;
+
 
 $chainingClassResolver = new ChainingClassResolver(
+    [
+        new Module(
+            'Code base',
+            [new PSR4ClassFileResolver(__DIR__ . '/base', 'Code\\Base')]
+        ),
+        new Module(
+            'Plugin 1',
+            [new PSR4ClassFileResolver(__DIR__ . '/plugins/plugin1', 'Plugin1')]
+        ),
+        new Module(
+            'Plugin 2',
+            [new PSR4ClassFileResolver(__DIR__ . '/plugins/plugin2', 'Plugin2')]
+        ),
+        new Module(
+            'Plugin 3',
+            [new PSR4ClassFileResolver(__DIR__ . '/plugins/plugin3', 'Plugin3')]
+        )
+    ],
     'Target'
 );
 ```
@@ -154,6 +126,11 @@ $chainingClassResolver = new ChainingClassResolver(
 The `$targetNs` constructor parameter defines the target namespace that the 
 class chain will be weaved into, in our case the classes will be chained under
 `\Target`.
+
+Modules will be chained in the order they are sent to the constructor; 
+this means, in the above example, `Plugin 1` will extend/override classes in 
+`Code base`, `Plugin 3` will override all, ect.
+
 
 ### Setting up the loader
 
