@@ -343,7 +343,7 @@
                 $node instanceof Node\Scalar\MagicConst\Dir &&
                 $this->filePath
             ) {
-                $this->replace($node, ChainedClassMeta::CLASS_CONST_DIRECTORY);
+                $this->replace($node, 'self::'.ChainedClassMeta::CLASS_CONST_DIRECTORY);
             }
             if (
                 $node instanceof Interface_ ||

@@ -1,3 +1,7 @@
+### 2.0.2
+
+* Bugfix: Broken chained code when using `__DIR__` constant
+
 ### 2.0.1
 
 #### Improvements

@@ -1,6 +1,6 @@
 {
   "name": "exteon/chaining-class-resolver",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Weaving class loader framework for PHP modular plugins providing class chaining",
   "type": "library",
   "homepage": "https://github.com/exteon/chaining-class-resolver",
