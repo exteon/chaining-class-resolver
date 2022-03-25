@@ -1,3 +1,9 @@
+## 2.1.0
+
+#### New features
+
+* `ChainedClassMeta::get()` now preloads the class so that the meta is consistent
+
 ### 2.0.2
 
 * Bugfix: Broken chained code when using `__DIR__` constant
