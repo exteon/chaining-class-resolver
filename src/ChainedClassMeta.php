@@ -2,6 +2,7 @@
 
     namespace Exteon\Loader\ChainingClassResolver;
 
+    use Exteon\ClassHelper;
     use Exteon\ClassMeta;
     use Exteon\Loader\ChainingClassResolver\DataStructure\RegistrationMeta;
     use InvalidArgumentException;
@@ -38,10 +39,10 @@
         /** @var array<class-string,bool> */
         private array $hasChainTrait;
 
-        private function __construct(string $className)
+        private function __construct(string $className, ClassMeta $classMeta)
         {
             $this->className = $className;
-            $this->classMeta = ClassMeta::get($className);
+            $this->classMeta = $classMeta;
         }
 
         /**
@@ -298,8 +299,19 @@
             if (isset(self::$instances[$className])) {
                 return self::$instances[$className];
             }
+            $classMeta = ClassMeta::get($className);
+
+            /*
+             * ClassMeta::get() can trigger class loading which can recursively call ChainedClassMeta::get(), in order
+             * to call setRegistrationMeta() in cached files.
+             * Make sure if this is the case we don't reinstance here
+             */
+            if (isset(self::$instances[$className])) {
+                return self::$instances[$className];
+            }
+
             $what = static::class;
-            $instance = new $what($className);
+            $instance = new $what($className, $classMeta);
             self::$instances[$className] = $instance;
             return $instance;
         }
