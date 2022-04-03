@@ -553,26 +553,13 @@
          * @param Node $node
          * @return int|null
          */
-        private function findBlockStartPos(Node $node): ?int
+        private function findBlockAppendPos(Node $node): ?int
         {
-            $pos = $node->getStartFilePos();
-            if (
-                !property_exists($node, 'stmts') ||
-                !$node->stmts
-            ) {
-                $posInner = $node->getEndFilePos();
-            } else {
-                $posInner = reset($node->stmts)->getStartFilePos();
-            }
-            for ($i = $posInner; $i >= $pos; $i--) {
-                if ($this->initialSource[$i] === '{') {
-                    break;
-                }
-            }
-            if ($i === $pos) {
+            $blockEndPos = $node->getEndFilePos();
+            if($this->initialSource[$blockEndPos] !== '}'){
                 return null;
             }
-            return $i + 1;
+            return $blockEndPos;
         }
 
         /**
@@ -582,7 +569,7 @@
          */
         private function addInBlock(Node $node, $with): void
         {
-            $pos = $this->findBlockStartPos($node);
+            $pos = $this->findBlockAppendPos($node);
             if ($pos === null) {
                 throw new ErrorException("Cannot find block start");
             }
