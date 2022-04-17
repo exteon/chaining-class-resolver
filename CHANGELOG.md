@@ -1,3 +1,9 @@
+### 2.1.1
+
+#### Bugfixes
+
+* Adding in constants was failing when a `{` was present in the code source
+
 ## 2.1.0
 
 #### New features
