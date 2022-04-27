@@ -61,8 +61,7 @@
             );
             $loader->register();
 
-            $foo = new \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Foo(
-            );
+            $foo = new \Test\Exteon\Loader\ChainingClassResolver\Props\Target\Foo();
             self::assertTrue(
                 is_a(
                     \Test\Exteon\Loader\ChainingClassResolver\Props\Module2\Foo::class,
@@ -190,5 +189,64 @@
                     )
                 );
             }
+        }
+
+        /**
+         * @throws \ErrorException
+         */
+        public function testMultichain(): void
+        {
+            $chainResolver1 = new ChainingClassResolver(
+                [
+                    new Module(
+                        'Module1',
+                        [
+                            new PSR4ClassFileResolver(
+                                'test/Props/Module1',
+                                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Module1'
+                            )
+                        ]
+                    ),
+                    new Module(
+                        'Module2',
+                        [
+                            new PSR4ClassFileResolver(
+                                'test/Props/Module2',
+                                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Module2'
+                            )
+                        ]
+                    )
+                ],
+                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Target'
+            );
+            $chainResolver2 = new ChainingClassResolver(
+                [
+                    new Module(
+                        'Multi',
+                        [
+                            new PSR4ClassFileResolver(
+                                'test/Props/Multi',
+                                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Multi'
+                            )
+                        ]
+                    )
+                ],
+                'Test\\Exteon\\Loader\\ChainingClassResolver\\Props\\Target2'
+            );
+            $targetClassResolvers = [$chainResolver1, $chainResolver2];
+            $chainResolver1->setClassTargetResolvers($targetClassResolvers);
+            $chainResolver2->setClassTargetResolvers($targetClassResolvers);
+            $loader = new MappingClassLoader(
+                [],
+                [$chainResolver1, $chainResolver2],
+                null,
+                new StreamWrapLoader([])
+            );
+            $loader->register();
+
+            $chain2 = new \Test\Exteon\Loader\ChainingClassResolver\Props\Target2\Chain2();
+            $foo = $chain2->getFoo();
+            self::assertInstanceOf(\Test\Exteon\Loader\ChainingClassResolver\Props\Target\Foo::class, $foo);
+            self::assertInstanceOf(\Test\Exteon\Loader\ChainingClassResolver\Props\Module2\Foo::class, $foo);
         }
     }

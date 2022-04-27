@@ -2,7 +2,6 @@
 
     namespace Exteon\Loader\ChainingClassResolver;
 
-    use Exteon\ClassHelper;
     use Exteon\ClassMeta;
     use Exteon\Loader\ChainingClassResolver\DataStructure\RegistrationMeta;
     use InvalidArgumentException;
@@ -48,7 +47,7 @@
         /**
          * @param RegistrationMeta $registrationMeta
          */
-        public function setRegistrationMeta(RegistrationMeta $registrationMeta)
+        public function setRegistrationMeta(RegistrationMeta $registrationMeta): void
         {
             $this->registrationMeta = $registrationMeta;
         }
@@ -138,7 +137,7 @@
                         if ($trait->getChainedClass() !== $chain) {
                             $traitsFlipped[$trait] = null;
                         }
-                        foreach($trait->getChainTraits() as $chainTrait){
+                        foreach ($trait->getChainTraits() as $chainTrait) {
                             $traitsFlipped[$chainTrait] = null;
                         }
                     }
@@ -190,7 +189,7 @@
                 } else {
                     $traitName = $trait->getClassName();
                 }
-            } elseif($trait instanceof ClassMeta){
+            } elseif ($trait instanceof ClassMeta) {
                 if (!$trait->isTrait()) {
                     $invalidArgument = true;
                 } else {
@@ -208,7 +207,6 @@
             }
             $this->initChainTraits();
             return array_key_exists($traitName, $this->hasChainTrait);
-
         }
 
         /**

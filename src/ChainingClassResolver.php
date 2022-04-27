@@ -15,12 +15,15 @@
     use PhpParser\ParserFactory;
     use Exteon\ClassNameHelper;
 
-    class ChainingClassResolver implements ClassResolver, ClassScanner
+    class ChainingClassResolver implements ClassResolver, ClassScanner, ClassTargetResolver
     {
         private string $targetNs;
 
         /** @var IModule[] */
         private array $modules;
+
+        /** @var ClassTargetResolver[] */
+        private array $classTargetResolvers;
 
         /**
          * ChainingClassResolver constructor.
@@ -33,6 +36,7 @@
         ) {
             $this->targetNs = $targetNs;
             $this->modules = $modules;
+            $this->classTargetResolvers = [$this];
         }
 
         /**
@@ -156,7 +160,7 @@
                 $classSpec,
                 $previousClassSpec,
                 $filePath,
-                $this,
+                $this->classTargetResolvers,
                 $moduleName
             );
             $traverser->addVisitor($visitor);
@@ -353,7 +357,17 @@
                 }
             }
             if (ClassNameHelper::isNsPrefix($this->targetNs, $class)) {
-                return $class;
+                $relativeClass = ClassNameHelper::stripNsPrefix($this->targetNs, $class);
+                foreach ($this->modules as $module) {
+                    $resolved = $module->resolveRelativeClass($relativeClass);
+                    if ($resolved) {
+                        return ClassNameHelper::joinNs(
+                            $this->targetNs,
+                            $resolved->getClassSpec()->getNs(),
+                            $resolved->getClassSpec()->getClass()
+                        );
+                    }
+                }
             }
             return null;
         }
@@ -388,5 +402,23 @@
                 return new TargetNSSpec(null, $this->targetNs, $ns, $class);
             }
             return null;
+        }
+
+        /**
+         * When using multiple chaining resolvers, or other class manipulation methods, one may need to set external
+         * class target resolvers to modify classes in generated files.
+         *
+         * @param ClassTargetResolver[] $resolvers
+         * @return void
+         */
+        public function setClassTargetResolvers(array $resolvers): void
+        {
+            $this->classTargetResolvers = [
+                $this,
+                ...array_filter(
+                    $resolvers,
+                    fn(ClassTargetResolver $resolver): bool => $resolver !== $this
+                )
+            ];
         }
     }

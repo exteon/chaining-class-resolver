@@ -28,7 +28,10 @@
         private TargetNSSpec $classSpec;
         private ?TargetNSSpec $previousClassSpec;
         private ?string $filePath;
-        private ChainingClassResolver $resolver;
+
+        /** @var ClassTargetResolver[] */
+        private array $classTargetResolvers;
+
         private Class_|Interface_|Trait_|null $classNode;
 
         /** @var TraitUse[] */
@@ -57,12 +60,20 @@
         /**  @var string[] */
         private array $canonicalExtends = [];
 
+        /**
+         * @param $source
+         * @param TargetNSSpec $classSpec
+         * @param TargetNSSpec|null $previousClassSpec
+         * @param string|null $filePath
+         * @param ClassTargetResolver[] $classTargetResolvers
+         * @param string $moduleName
+         */
         public function __construct(
             $source,
             TargetNSSpec $classSpec,
             ?TargetNSSpec $previousClassSpec,
             ?string $filePath,
-            ChainingClassResolver $resolver,
+            array $classTargetResolvers,
             string $moduleName
         ) {
             $this->source = $source;
@@ -70,7 +81,7 @@
             $this->classSpec = $classSpec;
             $this->previousClassSpec = $previousClassSpec;
             $this->filePath = $filePath;
-            $this->resolver = $resolver;
+            $this->classTargetResolvers = $classTargetResolvers;
             $this->moduleName = $moduleName;
         }
 
@@ -412,7 +423,13 @@
             } else {
                 return null;
             }
-            $resolved = $this->resolver->getTargetClass($ns);
+            $resolved = null;
+            foreach($this->classTargetResolvers as $resolver){
+                $resolved = $resolver->getTargetClass($ns);
+                if($resolved){
+                    break;
+                }
+            }
             if ($resolved) {
                 $replace = null;
                 if ($extendMode) {
