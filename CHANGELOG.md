@@ -1,3 +1,9 @@
+## 2.2.0
+
+#### New features
+
+* Add `ChainingClassResolver::setClassTargetResolvers()` to allow for multiple chain resolvers to replace target classes in source files.
+
 ### 2.1.1
 
 #### Bugfixes

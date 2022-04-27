@@ -38,11 +38,11 @@
         },
         {
             "name": "exteon/file-helper",
-            "version": "1.6.3",
+            "version": "1.6.4",
             "dist": {
                 "type": "path",
                 "url": "/mnt/libraries/file-helper",
-                "reference": "b83d653510c21f0a7d39ec6798b521181a31cbc6"
+                "reference": "f459d8941a7facf7fb435d721aae0032896a045a"
             },
             "type": "library",
             "autoload": {
